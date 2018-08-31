@@ -22,7 +22,7 @@ initMap = () => {
         scrollWheelZoom: false
       });
       L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.jpg70?access_token={mapboxToken}', {
-        mapboxToken: '<your MAPBOX API KEY HERE>',
+        mapboxToken: '<pk.eyJ1IjoicnNtaXRoOTAzIiwiYSI6ImNqbGlpcm9jZTAxbmUzcGxkdHljcjB0MngifQ.h-mQeloU4WNKc4G4J4vX3g>',
         maxZoom: 18,
         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
           '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
@@ -54,7 +54,7 @@ initMap = () => {
 /**
  * Get current restaurant from page URL.
  */
-fetchRestaurantFromURL = (callback) => {
+fetchRestaurantFromURL = callback => {
   if (self.restaurant) { // restaurant already fetched!
     callback(null, self.restaurant)
     return;
@@ -87,6 +87,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   address.innerHTML = restaurant.address;
 
   const image = document.getElementById('restaurant-img');
+  image.className = "detailed-restaurant-img";
   image.className = 'restaurant-img'
   image.src = DBHelper.imageUrlForRestaurant(restaurant);
 
@@ -146,7 +147,7 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
 /**
  * Create review HTML and add it to the webpage.
  */
-createReviewHTML = (review) => {
+createReviewHTML = review => {
   const li = document.createElement('li');
   const name = document.createElement('p');
   name.innerHTML = review.name;
@@ -174,6 +175,7 @@ fillBreadcrumb = (restaurant=self.restaurant) => {
   const breadcrumb = document.getElementById('breadcrumb');
   const li = document.createElement('li');
   li.innerHTML = restaurant.name;
+  li.aria = restaurant.name
   breadcrumb.appendChild(li);
 }
 
@@ -190,5 +192,5 @@ getParameterByName = (name, url) => {
     return null;
   if (!results[2])
     return '';
-  return decodeURIComponent(results[2].replace(/\+/g, ' '));
+  return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
