@@ -1,7 +1,7 @@
 let restaurants,
   neighborhoods,
   cuisines
-var newMap
+var newMap;
 var markers = []
 
 /**
@@ -31,10 +31,11 @@ fetchNeighborhoods = () => {
  * Set neighborhoods HTML.
  */
 fillNeighborhoodsHTML = (neighborhoods = self.neighborhoods) => {
-  const select = document.getElementById('neighborhoods-select');
+  const select = document.getElementById("neighborhoods-select");
   neighborhoods.forEach(neighborhood => {
-    const option = document.createElement('option');
+    const option = document.createElement("option");
     option.innerHTML = neighborhood;
+    option.role = "menuitem";
     option.value = neighborhood;
     select.append(option);
   });
@@ -61,8 +62,9 @@ fillCuisinesHTML = (cuisines = self.cuisines) => {
   const select = document.getElementById('cuisines-select');
 
   cuisines.forEach(cuisine => {
-    const option = document.createElement('option');
+    const option = document.createElement("option");
     option.innerHTML = cuisine;
+    option.role = "menuitem";
     option.value = cuisine;
     select.append(option);
   });
@@ -78,7 +80,7 @@ initMap = () => {
         scrollWheelZoom: false
       });
   L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.jpg70?access_token={mapboxToken}', {
-    mapboxToken: '<your MAPBOX API KEY HERE>',
+    mapboxToken: 'pk.eyJ1IjoicnNtaXRoOTAzIiwiYSI6ImNqbGlpcm9jZTAxbmUzcGxkdHljcjB0MngifQ.h-mQeloU4WNKc4G4J4vX3g',
     maxZoom: 18,
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
       '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
@@ -157,13 +159,17 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
  */
 createRestaurantHTML = (restaurant) => {
   const li = document.createElement('li');
+  
+  li.role = "navigation";
 
-  const image = document.createElement('img');
-  image.className = 'restaurant-img';
+  const image = document.createElement("img");
+  image.className = "restaurant-img";
+  image.alt = restaurant.name;
   image.src = DBHelper.imageUrlForRestaurant(restaurant);
+  image.tabindex = "0";
   li.append(image);
 
-  const name = document.createElement('h1');
+  const name = document.createElement('h2');
   name.innerHTML = restaurant.name;
   li.append(name);
 
@@ -177,6 +183,10 @@ createRestaurantHTML = (restaurant) => {
 
   const more = document.createElement('a');
   more.innerHTML = 'View Details';
+  more.title = `Click here to get more information and comments on ${
+    restaurant.name
+  }`;
+  
   more.href = DBHelper.urlForRestaurant(restaurant);
   li.append(more)
 
